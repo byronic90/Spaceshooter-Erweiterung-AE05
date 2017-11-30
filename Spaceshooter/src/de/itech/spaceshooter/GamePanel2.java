@@ -137,7 +137,7 @@ public class GamePanel2 extends JPanel{
 	                    case VK_UP: playersShip.accelerateShip(); break;
 	                    case VK_DOWN: playersShip.decelerateShip(); break;   
 	                }
-                } else if (gameState == 1) { restartGame(); } 
+                } else if (gameState == 1) { showMenu(); } 
                 else if (gameState == 3) { if (e.getKeyCode() == KeyEvent.VK_ENTER) switchToScoreboard(); }
                 else if (gameState == 4) { 
                 	switch(e.getKeyCode()) {
