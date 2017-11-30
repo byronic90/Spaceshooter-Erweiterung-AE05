@@ -16,7 +16,7 @@ public class Asteroid extends GameObject{
         super(position, width, height);        
         setMovingAngle(movingAngle);
         setMovingDistance(movingDistance);        
-        URL imageURL = getClass().getResource("images/asteroid_transp.png");        
+        URL imageURL = getClass().getResource("images/asteroid/asteroid_transp.png");        
         try {
         	astImage = ImageIO.read(imageURL);
         } catch (Exception e)

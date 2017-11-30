@@ -3,6 +3,7 @@ package de.itech.spaceshooter;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.net.URL;
+
 import javax.imageio.ImageIO;
 
 public class Spaceship extends GameObject{    
@@ -19,12 +20,26 @@ public class Spaceship extends GameObject{
     private boolean paintShipStatusBar = true;
     private boolean isVisible = true;
     private Image shipImage;    
+    private int shipModel = 2;
+    private String shipName;
         
     public Spaceship(Coordinate position, double width, double height, double movingAngle, double movingDistance) {
         super(position, width, height);        
         setMovingAngle(movingAngle);
-        setMovingDistance(movingDistance);               
-        URL imageURL = getClass().getResource("images/ship_blue.png");        
+        setMovingDistance(movingDistance); 
+        switch(shipModel){
+        case 1: shipName = "ship_blue.png";
+        	break;
+        case 2: shipName = "ship_basic.png";
+    	break;
+        case 3: shipName = "ship_black.png";
+    	break;
+        case 4: shipName = "ship_tut.png";
+    	break;
+        }
+        
+        URL imageURL = getClass().getResource("images/playerShips/" + shipName);  
+        System.out.print(imageURL);      
         try {
         	shipImage = ImageIO.read(imageURL);
         } catch (Exception e)
