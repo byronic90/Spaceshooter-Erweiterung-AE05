@@ -102,7 +102,13 @@ public class GamePanel2 extends JPanel{
     		});    		
     		this.add(inputText);
     		this.add(saveButton);
-    	}    	
+    	} else {
+    		setGameOver(false);
+    		if (inputText != null && saveButton != null) {
+    	    	inputText.setVisible(false);
+    	    	saveButton.setVisible(false);
+        	}
+    	}
     }    
     
     public void switchToScoreboard() {
@@ -111,7 +117,7 @@ public class GamePanel2 extends JPanel{
 	    	inputText.setVisible(false);
 	    	saveButton.setVisible(false);
     	}
-    }
+    }    
     //<sibr
     
     private void init() {
@@ -194,7 +200,7 @@ public class GamePanel2 extends JPanel{
         resetY = 400;
         snipTextPos = 0;
         playersShip.setVisible(false);
-        gameState = 0;                               
+        setGameState(0);                               
     }
     //>sibr
     private void switchSelection(int value) {    	
@@ -294,7 +300,6 @@ public class GamePanel2 extends JPanel{
         asteroidSpeed = 5; 
         setGameOver(false);
         playersShip.setVisible(true);
-    	//restartGame();
     }
     
     public void pauseGame() { t.stop(); }        
@@ -312,11 +317,8 @@ public class GamePanel2 extends JPanel{
         t.start();
     }
     
-    private void endGame() {         
-    	setGameOver(true);
-        //>sibr
-    	//pauseGame();
-    	//<sibr
+    public void endGame() {         
+    	setGameOver(true);        
         setGameState(3);
     }       
 
@@ -426,13 +428,14 @@ public class GamePanel2 extends JPanel{
         }     
         
         //>sibr
+        //Scoreboard state
         if (gameState == 1) {                        
-            g.setFont(new Font(defaultFont, Font.BOLD, 30));            
-            g.setColor(new Color(3, 132, 0));                                                                                                                        
+            g.setFont(new Font("OCR A Extended", Font.BOLD, 30));            
+            g.setColor(new Color(80, 200, 80));                                                                                                                        
             g.drawString("SCOREBOARD", textPosX + 300, 50);
             
             g.setColor(new Color(2, 98, 0));
-            g.setFont(new Font(defaultFont, Font.BOLD, 26));
+            g.setFont(new Font("OCR A Extended", Font.BOLD, 26));
             int dYTest = 60;
             for (int i = 0; i < playerString.length; i++) {
 	            g.drawString(playerString[i], textPosX + 170, 50 + dYTest);
@@ -440,15 +443,15 @@ public class GamePanel2 extends JPanel{
 	            dYTest += 30;
             }            
         }
-        
+        //Game-Over Input state
         if (gameState == 3) {                        
-            g.setFont(new Font(defaultFont, 0, 30));            
+            g.setFont(new Font("OCR A Extended", 0, 30));            
             g.setColor(new Color(80, 222, 80));                                                                     
-            g.drawString("NICE TRY, YOU GOT " + score + " POINTS", textPosX + 220, 200);            
+            g.drawString("NICE TRY, YOU GOT " + score + " POINTS", textPosX + 130, 200);            
             int dYTest = 50;
             g.drawString("PLEASE ENTER YOUR NAME...", textPosX + 220, 200 + dYTest);                                              
         }
-        
+        //Menu-state
         if (gameState == 4) {                                	
         	g.setFont(new Font("OCR A Extended", 0, 35));            
             g.setColor(new Color(100, 254, 100));                 
@@ -483,14 +486,13 @@ public class GamePanel2 extends JPanel{
             	if (blinkState > 3) { blinkState = 0; }
             }
 	            switch (blinkState) {
-	            	case 0: g.drawString("      <                       >", textPosX + 110, 110);
+	            	case 1: g.drawString("      <                       >", textPosX + 110, 110);
 	            			break;
-	            	case 1: g.drawString("    < <                       > >", textPosX + 103, 110);
+	            	case 2: g.drawString("    < <                       > >", textPosX + 100, 110);
 	            			break;
-	            	case 2: g.drawString("  < < <                       > > >", textPosX + 96, 110);
+	            	case 3: g.drawString("  < < <                       > > >", textPosX + 90, 110);
 	            			break;
-	            	case 3: g.drawString("< < < <                       > > > >", textPosX + 79, 110);
-	            			break;
+	            	case 0: break;
 	            }            
         }
         //<sibr

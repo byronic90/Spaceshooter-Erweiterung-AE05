@@ -66,26 +66,7 @@ public class GameWindow extends JFrame{
         }); 
     }
     
-    private void addGameMenuItems(JMenu gameMenu) {
-        JMenuItem pauseItem = new JMenuItem("Pause");
-        gameMenu.add(pauseItem);        
-        pauseItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                shipGamePanel.pauseGame();
-            }
-        });
-        
-        JMenuItem continuetItem = new JMenuItem("Continue");
-        gameMenu.add(continuetItem);       
-        continuetItem.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {                
-                shipGamePanel.continueGame();
-            }
-        });
-        
-        gameMenu.addSeparator();
+    private void addGameMenuItems(JMenu gameMenu) {                
         JMenuItem restartItem = new JMenuItem("Restart");
         gameMenu.add(restartItem);       
         restartItem.addActionListener(new ActionListener() {
@@ -102,10 +83,22 @@ public class GameWindow extends JFrame{
         scoreItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {                
-                shipGamePanel.setGameState(1);
-                System.out.println("push");
+                shipGamePanel.setGameState(1);                
             }
         });
+        
+        gameMenu.addSeparator();
+        JMenuItem mainMenuItem = new JMenuItem("Show Menu");
+        gameMenu.add(mainMenuItem);
+        mainMenuItem.addActionListener(new ActionListener() {
+        	
+        	@Override
+            public void actionPerformed(ActionEvent e) {                
+                shipGamePanel.setGameOver(false);
+                shipGamePanel.setGameState(4);
+            }
+        });
+        
         //<sibr
     }       
 }
