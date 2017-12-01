@@ -61,6 +61,8 @@ public class GamePanel2 extends JPanel{
 	private int menuSelectionPosY = 250;
 	private int menuSelectedItem = 1; //1 - START, 2 - SETTINGS, 3 - SCOREBOARD, 4 - EXIT
 	boolean showSelection;
+	boolean showTitleBlink;
+	int blinkState;
     //<sibr
     
     public GamePanel2() {        
@@ -218,13 +220,14 @@ public class GamePanel2 extends JPanel{
     }
     private void showMenu() {
     	menuText = new String[]{
-    								"     > = = SPACESHOOTER = = <",
+    								"       SPACESHOOTER",
     								"                             START",
     								"                           SETTINGS",
     								"                        SCOREBOARD",
     								"                              EXIT"    								
                 					};
     	gameState = 4;
+    	setGameOver(false);
     }
     
     private void testText() {    						      
@@ -440,21 +443,22 @@ public class GamePanel2 extends JPanel{
         
         if (gameState == 3) {                        
             g.setFont(new Font(defaultFont, 0, 30));            
-            g.setColor(new Color(3, 132, 0));                                                                     
+            g.setColor(new Color(80, 222, 80));                                                                     
             g.drawString("NICE TRY, YOU GOT " + score + " POINTS", textPosX + 220, 200);            
             int dYTest = 50;
             g.drawString("PLEASE ENTER YOUR NAME...", textPosX + 220, 200 + dYTest);                                              
         }
         
         if (gameState == 4) {                                	
-        	g.setFont(new Font(defaultFont, Font.BOLD, 35));            
-            g.setColor(new Color(3, 132, 0));                 
-            g.drawString(menuText[0], textPosX + 170, 100);
+        	g.setFont(new Font("OCR A Extended", 0, 35));            
+            g.setColor(new Color(100, 254, 100));                 
+            g.drawString(menuText[0], textPosX + 110, 100);
                         
             int dYTest = 50;            
             for (int i = 1; i < menuText.length; i++) {            	
             	g.setFont(new Font(defaultFont, 0, 25));
             	g.setColor(new Color(3, 132, 0));
+            	//Selection is drawn differently
             	if (i == menuSelectedItem) { 
             		menuSelectionPosY = 250+i*50; 
             		g.setColor(new Color(50, 220, 50));
@@ -463,6 +467,7 @@ public class GamePanel2 extends JPanel{
             	g.drawString(menuText[i], textPosX + 190, 250 + dYTest);	            
 	            dYTest += 50;
             }   
+            //Selection blinking
             if (tickz%5==0) { showSelection = !showSelection; }
             if (showSelection) {
             	g.setFont(new Font(defaultFont, Font.BOLD, 35));
@@ -470,6 +475,23 @@ public class GamePanel2 extends JPanel{
             	g.drawString(">", textPosX + 250, menuSelectionPosY);
             	g.drawString("<", textPosX + 450, menuSelectionPosY);
             }
+            //Title Effects
+            g.setFont(new Font(defaultFont, 0, 70));
+        	g.setColor(new Color(50, 190, 50));           
+            if (tickz%20==0) { 
+            	blinkState += 1;
+            	if (blinkState > 3) { blinkState = 0; }
+            }
+	            switch (blinkState) {
+	            	case 0: g.drawString("      <                       >", textPosX + 110, 110);
+	            			break;
+	            	case 1: g.drawString("    < <                       > >", textPosX + 103, 110);
+	            			break;
+	            	case 2: g.drawString("  < < <                       > > >", textPosX + 96, 110);
+	            			break;
+	            	case 3: g.drawString("< < < <                       > > > >", textPosX + 79, 110);
+	            			break;
+	            }            
         }
         //<sibr
         
