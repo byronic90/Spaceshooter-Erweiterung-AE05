@@ -1,3 +1,11 @@
+/**
+ * Spaceshooter-Game, entstanden in AE-Workshop Projekt der IT5e und 
+ * erweitert im Projekt 05.  
+ *
+ * @author Simeon Brkitsch, Yannik Wunderlich, Turag Nikandam, Malte Heinsohn
+ * @version 2.0
+ */
+
 package de.itech.spaceshooter;
 
 import java.awt.Color;
@@ -27,6 +35,7 @@ import javax.swing.Timer;
 
 public class GamePanel2 extends JPanel{
     
+	//Init-Area for variables of the class
     public static final String IMAGE_DIR = "images/";
     private final Dimension prefSize = new Dimension(800, 600);    
     private boolean gameOver = false;        
@@ -42,16 +51,13 @@ public class GamePanel2 extends JPanel{
     private int asteroidSpawnTime = 60;
     private int asteroidSpeed = 5;  
     private int spawnResetTime = asteroidSpawnTime;    
-    //>sibr
-    private int gameState = 0; //0 - InitState, 1 - Scoreboard, 2 - Alive and Gaming, 3 - Input, 4 - Menü
-    //<sibr
+    private int gameState = 0; //0 - InitState, 1 - Scoreboard, 2 - Alive and Gaming, 3 - Input, 4 - Menu
     private int textPosX = 50;
     private int textPosY;
     private int resetY;
     private int snipTextPos = 0;
     private String[] introText; 
     private Image background;
-    //>sibr
     private String[] playerString;
     private String[] scoreString;
     JTextField inputText;
@@ -63,26 +69,23 @@ public class GamePanel2 extends JPanel{
 	boolean showSelection;
 	boolean showTitleBlink;
 	int blinkState;
-    //<sibr
-    
+    	
     public GamePanel2() {        
         setFocusable(true);
         setPreferredSize(prefSize);
         URL imageURL = getClass().getResource("images/background.jpg");        
         try { background = ImageIO.read(imageURL); } 
         catch (Exception e) { System.out.println(e.getMessage()); }                
-        init();   
-        //>sibr
-        //intro();
+        init();           
         showMenu();
         testText();
-        //<sibr
     }
 
     public Spaceship getPlayersShip() { return playersShip; }   
     public boolean isGameOver() { return gameOver; }
     public void setGameOver(boolean gameOver) { this.gameOver = gameOver; }
-    //>sibr
+
+    //Sets the GameState(0 - InitState, 1 - Scoreboard, 2 - Alive and Gaming, 3 - Input, 4 - Menü)
     public void setGameState(int gameState) {
     	this.gameState = gameState;
     	if (gameState == 3) {
@@ -110,7 +113,7 @@ public class GamePanel2 extends JPanel{
         	}
     	}
     }    
-    
+        
     public void switchToScoreboard() {
     	this.gameState = 1;
     	if (inputText != null && saveButton != null) {
@@ -118,8 +121,8 @@ public class GamePanel2 extends JPanel{
 	    	saveButton.setVisible(false);
     	}
     }    
-    //<sibr
     
+    //Creates all game objects, registers keylisteners and starts the Timer for the main loop
     private void init() {
     	createGameObjects();
     	
@@ -202,7 +205,7 @@ public class GamePanel2 extends JPanel{
         playersShip.setVisible(false);
         setGameState(0);                               
     }
-    //>sibr
+    
     private void switchSelection(int value) {    	
     	menuSelectedItem += value;
     	if (menuSelectedItem > 4) {
