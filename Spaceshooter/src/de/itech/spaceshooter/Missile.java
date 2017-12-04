@@ -9,7 +9,9 @@ import java.awt.geom.RoundRectangle2D;
 public class Missile extends GameObject {    
     
     private int range = 150;
-    private Color missileColor = Color.RED;
+    private int selectedColor = 1;
+    private Color missileColor = Color.GREEN;
+    
     
     public Missile (Coordinate position, double size, double movingAngle, double movingDistance) {
         super(position, size, size/3);        

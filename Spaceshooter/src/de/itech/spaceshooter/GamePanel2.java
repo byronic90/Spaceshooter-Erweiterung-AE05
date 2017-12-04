@@ -39,7 +39,7 @@ public class GamePanel2 extends JPanel{
     public static final String IMAGE_DIR = "images/";
     private final Dimension prefSize = new Dimension(800, 600);    
     private boolean gameOver = false;        
-    private Timer t;      
+    private Timer t;
     private Spaceship playersShip = null;        
     private List<Missile> missiles;      
     private ArrayList<Asteroid> testAsts;           
@@ -73,7 +73,7 @@ public class GamePanel2 extends JPanel{
     public GamePanel2() {        
         setFocusable(true);
         setPreferredSize(prefSize);
-        URL imageURL = getClass().getResource("images/background.jpg");        
+        URL imageURL = getClass().getResource("images/background/background.jpg");        
         try { background = ImageIO.read(imageURL); } 
         catch (Exception e) { System.out.println(e.getMessage()); }                
         init();           
@@ -275,7 +275,7 @@ public class GamePanel2 extends JPanel{
         random = new Random();        
         testAsts = new ArrayList<Asteroid>();        
         explosionsList = new ArrayList<Animation>();
-        String imagePath = "images/explosion_anim.png";
+        String imagePath = "images/explosion/explosion_anim.png";
         URL imageURL = getClass().getResource(imagePath);        
         try { explosionAnimImg = ImageIO.read(imageURL); } 
         catch (Exception e) { System.out.println("NO EXPL"); }
