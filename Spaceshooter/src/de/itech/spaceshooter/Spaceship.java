@@ -27,15 +27,16 @@ public class Spaceship extends GameObject{
         super(position, width, height);        
         setMovingAngle(movingAngle);
         setMovingDistance(movingDistance); 
+        
         switch(shipModel){
         case 1: shipName = "ship_blue.png";
         	break;
         case 2: shipName = "ship_basic.png";
-    	break;
+    		break;
         case 3: shipName = "ship_black.png";
-    	break;
+    		break;
         case 4: shipName = "ship_tut.png";
-    	break;
+    		break;
         }
         
         URL imageURL = getClass().getResource("images/playerShips/" + shipName);  
