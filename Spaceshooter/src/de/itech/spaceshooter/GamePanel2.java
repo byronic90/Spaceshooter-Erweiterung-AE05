@@ -20,13 +20,17 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.image.BufferedImage;
+
 import static java.awt.event.KeyEvent.*;
+
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+
 import javax.imageio.ImageIO;
 import javax.swing.JButton;
 import javax.swing.JPanel;
@@ -58,8 +62,8 @@ public class GamePanel2 extends JPanel{
     private int snipTextPos = 0;
     private String[] introText; 
     private Image background;
-    private String[] playerString;
-    private String[] scoreString;
+    private ArrayList<String> playerString = new ArrayList<String>();
+    private ArrayList<String> scoreString = new ArrayList<String>();
     JTextField inputText;
 	JButton saveButton;
 	private String[] menuText;
@@ -78,7 +82,7 @@ public class GamePanel2 extends JPanel{
         catch (Exception e) { System.out.println(e.getMessage()); }                
         init();           
         showMenu();
-        testText();
+        topTen();
     }
 
     public Spaceship getPlayersShip() { return playersShip; }   
@@ -101,7 +105,10 @@ public class GamePanel2 extends JPanel{
     		saveButton.setForeground(new Color(2, 120, 0));
     		saveButton.addActionListener( new ActionListener() {
     			@Override
-    			public void actionPerformed(ActionEvent e){ switchToScoreboard(); } 
+    			public void actionPerformed(ActionEvent e){ 
+    				Connection.setPlayer(inputText.getText(), score + "");
+    				switchToScoreboard(); 
+    			} 
     		});    		
     		this.add(inputText);
     		this.add(saveButton);
@@ -149,7 +156,11 @@ public class GamePanel2 extends JPanel{
 	                    case VK_DOWN: playersShip.decelerateShip(); break;   
 	                }
                 } else if (gameState == 1) { showMenu(); } 
-                else if (gameState == 3) { if (e.getKeyCode() == KeyEvent.VK_ENTER) switchToScoreboard(); }
+                else if (gameState == 3) { if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                		Connection.setPlayer(inputText.getText(), score + "");
+                		switchToScoreboard();                		
+                	}
+                }
                 else if (gameState == 4) { 
                 	switch(e.getKeyCode()) {
                 		case VK_ENTER: processMenuSelection(); break;
@@ -239,34 +250,15 @@ public class GamePanel2 extends JPanel{
     	setGameOver(false);
     }
     
-    private void testText() {    						      
-    	playerString = new String[]{ 	"Player1",
-						    			"Player2",
-						    			"Player3",
-						    			"Player4",
-						    			"Player5",
-						    			"Player6",
-						    			"Player7",
-						    			"Player8",
-						    			"Player9",
-						    			"Player10"						    			
-		};    	
-    	scoreString = new String[] {	"35000",
-						    			"35000",
-						    			"35000",
-						    			"35000",
-						    			"35000",
-						    			"35000",
-						    			"35000",
-						    			"35000",
-						    			"35000",
-						    			"35000"    									
-    	};
-    	//Platzhalter für echte Implementierung
-    	//playerString = new String[]{};
-    	//<
+    private void addToTopTen(String player, String score) {
+    	playerString.add(player);
+    	scoreString.add(score);
+    	
     }
-    //<sibr 
+    private void topTen() {    						      
+    	Connection.getTopTen("","");    	
+    	Connection.getInputAsHashmap(Connection.getTopTen("", "")).forEach((k,v) -> addToTopTen(k,v));    	
+    }
     
     private void createGameObjects() {
         if (playersShip == null) { playersShip = new Spaceship(new Coordinate(600,150), 70, 45, Math.toRadians(180), 0); }
@@ -429,8 +421,7 @@ public class GamePanel2 extends JPanel{
                 dY += 20;                
             }
         }     
-        
-        //>sibr
+                
         //Scoreboard state
         if (gameState == 1) {                        
             g.setFont(new Font("OCR A Extended", Font.BOLD, 30));            
@@ -440,9 +431,9 @@ public class GamePanel2 extends JPanel{
             g.setColor(new Color(2, 98, 0));
             g.setFont(new Font("OCR A Extended", Font.BOLD, 26));
             int dYTest = 60;
-            for (int i = 0; i < playerString.length; i++) {
-	            g.drawString(playerString[i], textPosX + 170, 50 + dYTest);
-	            g.drawString(scoreString[i], textPosX + 480, 50 + dYTest);
+            for (int i = 0; i < playerString.size(); i++) {
+	            g.drawString(playerString.get(i), textPosX + 170, 50 + dYTest);
+	            g.drawString(scoreString.get(i), textPosX + 480, 50 + dYTest);
 	            dYTest += 30;
             }            
         }
