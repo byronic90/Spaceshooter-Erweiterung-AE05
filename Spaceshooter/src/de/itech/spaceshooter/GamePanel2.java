@@ -81,8 +81,7 @@ public class GamePanel2 extends JPanel{
         try { background = ImageIO.read(imageURL); } 
         catch (Exception e) { System.out.println(e.getMessage()); }                
         init();           
-        showMenu();
-        topTen();
+        showMenu();        
     }
 
     public Spaceship getPlayersShip() { return playersShip; }   
@@ -122,6 +121,7 @@ public class GamePanel2 extends JPanel{
     }    
         
     public void switchToScoreboard() {
+    	topTen();
     	this.gameState = 1;
     	if (inputText != null && saveButton != null) {
 	    	inputText.setVisible(false);
@@ -256,7 +256,8 @@ public class GamePanel2 extends JPanel{
     	
     }
     private void topTen() {    						      
-    	Connection.getTopTen("","");    	
+    	playerString.clear();
+    	scoreString.clear();    	    
     	Connection.getInputAsHashmap(Connection.getTopTen("", "")).forEach((k,v) -> addToTopTen(k,v));    	
     }
     

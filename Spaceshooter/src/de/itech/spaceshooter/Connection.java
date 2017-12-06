@@ -30,10 +30,8 @@ public class Connection {
 	
 	public static void setPlayer(String player, String score) {
 		try {			
-			String url = "http://localhost:18181/Spaceshooter/SetNewPlayer";
-			HashMap<String, String> params = new HashMap<String, String>();
-		    params.put("name",player);
-		    params.put("score",score);
+			String url = "http://localhost:18181/Spaceshooter/SetNewPlayer?name="+player+"&score="+score;
+			HashMap<String, String> params = new HashMap<String, String>();		    
 
 		    // static class "HttpUtility" with static method "newRequest(url,method,callback)"		    
 		    HttpUtility.newRequest(url,HttpUtility.METHOD_POST,params, new HttpUtility.Callback() {
