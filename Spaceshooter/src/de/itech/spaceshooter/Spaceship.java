@@ -1,5 +1,6 @@
 package de.itech.spaceshooter;
 
+import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.net.URL;
@@ -22,6 +23,8 @@ public class Spaceship extends GameObject{
     private Image shipImage;    
     private int shipModel = 2;
     private String shipName;
+    private int selectedColor = 1;
+    private Color missileColor = Color.GREEN;
         
     public Spaceship(Coordinate position, double width, double height, double movingAngle, double movingDistance) {
         super(position, width, height);        
@@ -41,14 +44,45 @@ public class Spaceship extends GameObject{
         
         URL imageURL = getClass().getResource("images/playerShips/" + shipName);  
         System.out.print(imageURL);      
-        try {
-        	shipImage = ImageIO.read(imageURL);
-        } catch (Exception e)
-        {
-        	System.out.println("no ship");
-        }
+        try { shipImage = ImageIO.read(imageURL); } 
+        catch (Exception e) { System.out.println("no ship"); }
     }          
 
+    public void setMissileColor(int missileColor) { 
+    	switch(missileColor){    
+		    case 1: this.missileColor = Color.GREEN;
+					break;
+			case 2: this.missileColor = Color.RED;
+					break;
+			case 3: this.missileColor = Color.BLUE;
+					break;
+			case 4: this.missileColor = Color.WHITE;
+					break;
+    	}
+    	selectedColor = missileColor;
+    }
+    public int getMissileColorInt() { return this.selectedColor; }
+    public Color getMissileColor() { return this.missileColor; }
+    public int getShipModel() { return this.shipModel; }
+    public void setShipModel(int shipModel) { 
+    	this.shipModel = shipModel;
+    	
+    	switch(shipModel){
+        case 1: shipName = "ship_blue.png";
+        	break;
+        case 2: shipName = "ship_basic.png";
+    		break;
+        case 3: shipName = "ship_black.png";
+    		break;
+        case 4: shipName = "ship_tut.png";
+    		break;
+        }
+        
+        URL imageURL = getClass().getResource("images/playerShips/" + shipName);  
+        System.out.print(imageURL);      
+        try { shipImage = ImageIO.read(imageURL); } 
+        catch (Exception e) { System.out.println("no ship"); }
+    } 
     public double getDrivingVelocity() { return drivingVelocity; }
     public void setDrivingVelocity(double drivingSpeed) { this.drivingVelocity = drivingSpeed; }            
     public double getAngleCannon() { return angleCannon; }    
@@ -93,7 +127,7 @@ public class Spaceship extends GameObject{
         double cannonEndY = missileDirection.getY() * cannonLength;
         Coordinate missileStartPosition = new Coordinate(shipCenterX + cannonEndX - missileSize/2, 
                                                          shipCenterY + cannonEndY - missileSize/6);           
-        Missile missile = new Missile(missileStartPosition, missileSize, missileAngle, 15);
+        Missile missile = new Missile(missileStartPosition, missileSize, missileAngle, 15, this.missileColor);
         setAbleToShoot(false);      
         return missile;        
     }

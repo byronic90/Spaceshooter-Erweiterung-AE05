@@ -25,7 +25,6 @@ import static java.awt.event.KeyEvent.*;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -67,12 +66,15 @@ public class GamePanel2 extends JPanel{
     JTextField inputText;
 	JButton saveButton;
 	private String[] menuText;
+	private String[] settingsText;
 	private String defaultFont = "Agency FB";
 	private int menuSelectionPosY = 250;
 	private int menuSelectedItem = 1; //1 - START, 2 - SETTINGS, 3 - SCOREBOARD, 4 - EXIT
 	boolean showSelection;
 	boolean showTitleBlink;
 	int blinkState;
+	private Spaceship shipModel;
+	private Missile missileModel;
     	
     public GamePanel2() {        
         setFocusable(true);
@@ -109,6 +111,15 @@ public class GamePanel2 extends JPanel{
     				switchToScoreboard(); 
     			} 
     		});    		
+    		inputText.addKeyListener(new KeyAdapter() {
+    			public void keyTyped(KeyEvent e) {
+    				char c = e.getKeyChar();
+    				String preventSigns = "^!\"§$%&/()=?`´*+#~'-_.:,;<>|\\{[]} ";
+    			    if (preventSigns.indexOf(c) != -1) {
+    			    	e.consume();  // ignore event
+    			    }
+    			}
+    		});
     		this.add(inputText);
     		this.add(saveButton);
     	} else {
@@ -163,9 +174,18 @@ public class GamePanel2 extends JPanel{
                 }
                 else if (gameState == 4) { 
                 	switch(e.getKeyCode()) {
-                		case VK_ENTER: processMenuSelection(); break;
+                		case VK_ENTER: processMenuSelection(0); break;
                 		case VK_UP: switchSelection(-1); break;
                 		case VK_DOWN: switchSelection(1); break;
+                	}; 
+                }
+                else if (gameState == 5) { 
+                	switch(e.getKeyCode()) {
+                		case VK_ENTER: processMenuSelection(1); break;
+                		case VK_UP: switchSelection(-1); break;
+                		case VK_DOWN: switchSelection(1); break;
+                		case VK_LEFT: 	switchSkin(-1); break;                					  	
+                		case VK_RIGHT: switchSkin(1); break;
                 	}; 
                 }
             }
@@ -219,24 +239,51 @@ public class GamePanel2 extends JPanel{
     
     private void switchSelection(int value) {    	
     	menuSelectedItem += value;
-    	if (menuSelectedItem > 4) {
-    		menuSelectedItem = 1;
-    	}
-    	if (menuSelectedItem < 1) {
-    		menuSelectedItem = 4;
+    	if (menuSelectedItem > 4) { menuSelectedItem = 1; }
+    	if (menuSelectedItem < 1) { menuSelectedItem = 4; }
+    }
+    private void switchSkin(int value) {    	
+    	int currentModel;
+    	switch(menuSelectedItem) {
+    		case 1: currentModel = shipModel.getShipModel();
+    				currentModel += value;
+		    		if (currentModel > 4) { currentModel = 1; }
+		        	if (currentModel < 1) { currentModel = 4; }
+    				shipModel.setShipModel(currentModel);
+    				break;
+    		case 2: currentModel = playersShip.getMissileColorInt();
+    				currentModel += value;
+    				if (currentModel > 4) { currentModel = 1; }
+		        	if (currentModel < 1) { currentModel = 4; }
+		        	missileModel.setColor(currentModel);
+		        	playersShip.setMissileColor(currentModel);
+		        	break;
     	}
     }
-    private void processMenuSelection() {
-    	switch(menuSelectedItem) {
-    		case 1: restartGame();
-    				break;
-    		case 2: 
-    				break;
-    		case 3: switchToScoreboard();
-    				break;
-    		case 4: System.exit(0);
-    				break;
-    	}
+    private void processMenuSelection(int menuInt) {
+    	if (menuInt == 0) {
+	    	switch(menuSelectedItem) {
+	    		case 1: restartGame();
+	    				break;
+	    		case 2: showSettings();
+	    				break;
+	    		case 3: switchToScoreboard();
+	    				break;
+	    		case 4: System.exit(0);
+	    				break;
+	    	}
+    	} else {
+    		switch(menuSelectedItem) {
+	    		case 1: 
+	    				break;
+	    		case 2: 
+	    				break;
+	    		case 3: shipModel.setVisible(false);
+						playersShip.setShipModel(shipModel.getShipModel());	    				
+						showMenu();
+	    				break;
+    		}
+    	}    	    	
     }
     private void showMenu() {
     	menuText = new String[]{
@@ -248,6 +295,20 @@ public class GamePanel2 extends JPanel{
                 					};
     	gameState = 4;
     	setGameOver(false);
+    	menuSelectedItem = 1;
+    }
+    
+    private void showSettings() {
+    	settingsText = new String[]{
+				"       SPACESHOOTER",
+				"                          SHIPSKINS",
+				"                       MISSILECOLOR",
+				//"                       ASTEROIDSKINS",
+				"                              BACK"    								
+				};
+    	gameState = 5;    	
+    	menuSelectedItem = 1;
+    	if (shipModel != null) { shipModel.setVisible(true); }
     }
     
     private void addToTopTen(String player, String score) {
@@ -490,7 +551,64 @@ public class GamePanel2 extends JPanel{
 	            	case 0: break;
 	            }            
         }
-        //<sibr
+        //Settings State
+        if (gameState == 5) {          	
+        	int dYTest = 80;  
+            int deltaY = 90;
+            int startY = 190;
+        	if (shipModel == null) { 
+        		shipModel = new Spaceship(new Coordinate(370,startY+90), 70, 45, Math.toRadians(180), 0);
+        		shipModel.setShipModel(playersShip.getShipModel());        		
+        	}    
+        	if (missileModel == null) {        		                
+                double missileSize = playersShip.getWidth()*0.2;
+                double missileAngle = 0;                               
+                Coordinate missileStartPosition = new Coordinate(400, startY+200);                                                                 
+        		missileModel = new Missile(missileStartPosition, missileSize, missileAngle, 15, playersShip.getMissileColor());
+        	}
+        	shipModel.paintMe(g);
+        	missileModel.paintMe(g);
+        	g.setFont(new Font("OCR A Extended", 0, 35));            
+            g.setColor(new Color(100, 254, 100));                 
+            g.drawString(settingsText[0], textPosX + 110, 100);
+                                    
+            for (int i = 1; i < settingsText.length; i++) {            	
+            	g.setFont(new Font(defaultFont, 0, 25));
+            	g.setColor(new Color(3, 132, 0));
+            	//Selection is drawn differently
+            	if (i == menuSelectedItem) { 
+            		menuSelectionPosY = startY+i*deltaY+30; 
+            		g.setColor(new Color(50, 220, 50));
+            		g.setFont(new Font(defaultFont, 0, 27));
+            	} 	            	            	            	           
+            	g.drawString(settingsText[i], textPosX + 190, startY + dYTest);	            
+	            dYTest += deltaY;
+            }   
+            //Selection blinking
+            if (tickz%5==0) { showSelection = !showSelection; }
+            if (showSelection && menuSelectedItem != 3) {
+            	g.setFont(new Font(defaultFont, Font.BOLD, 35));
+            	g.setColor(new Color(50, 220, 50));
+            	g.drawString("<", textPosX + 250, menuSelectionPosY);
+            	g.drawString(">", textPosX + 450, menuSelectionPosY);
+            }
+            //Title Effects
+            g.setFont(new Font(defaultFont, 0, 70));
+        	g.setColor(new Color(50, 190, 50));           
+            if (tickz%20==0) { 
+            	blinkState += 1;
+            	if (blinkState > 3) { blinkState = 0; }
+            }
+	            switch (blinkState) {
+	            	case 1: g.drawString("      <                       >", textPosX + 110, 110);
+	            			break;
+	            	case 2: g.drawString("    < <                       > >", textPosX + 100, 110);
+	            			break;
+	            	case 3: g.drawString("  < < <                       > > >", textPosX + 90, 110);
+	            			break;
+	            	case 0: break;
+	            }            
+        }
         
         //Gameover text
         if (isGameOver() && gameState != 1) {
