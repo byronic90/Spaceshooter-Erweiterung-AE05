@@ -495,7 +495,8 @@ public class GamePanel2 extends JPanel{
             g.setFont(new Font("OCR A Extended", Font.BOLD, 26));
             int dYTest = 60;
             for (int i = 0; i < playerString.size(); i++) {
-	            g.drawString(playerString.get(i), textPosX + 170, 50 + dYTest);
+            	g.drawString((i+1)+".", textPosX + 110, 50 + dYTest);
+            	g.drawString(playerString.get(i), textPosX + 170, 50 + dYTest);
 	            g.drawString(scoreString.get(i), textPosX + 480, 50 + dYTest);
 	            dYTest += 30;
             }            
