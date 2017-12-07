@@ -2,6 +2,7 @@ package de.itech.spaceshooter;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 
@@ -64,8 +65,8 @@ public class Connection {
 		else { return content.toString(); }		
 	}
 	
-	public static LinkedHashMap<String, String> getInputAsHashmap(String input) {	
-		LinkedHashMap<String, String> outputList = new LinkedHashMap<String, String>();
+	public static ArrayList<String[]> getInputAsHashmap(String input) {	
+		ArrayList<String[]> outputList = new ArrayList<String[]>();
 		String inputCopy = input;
 						
 		while (inputCopy != "") {		
@@ -77,7 +78,8 @@ public class Connection {
 				inputCopy = "";
 			}	
 			
-			outputList.put(name, score);			
+			String[] player = { name, score };
+			outputList.add(player);			
 		}			
 							
 		return outputList;

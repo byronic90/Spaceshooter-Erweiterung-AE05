@@ -311,15 +311,16 @@ public class GamePanel2 extends JPanel{
     	if (shipModel != null) { shipModel.setVisible(true); }
     }
     
-    private void addToTopTen(String player, String score) {
-    	playerString.add(player);
-    	scoreString.add(score);
-    	
+    private void addToTopTen(ArrayList<String[]> playerList) {
+    	for (String[] player : playerList) {
+    		playerString.add(player[0]);
+    		scoreString.add(player[1]);
+		}    	
     }
     private void topTen() {    						      
     	playerString.clear();
     	scoreString.clear();    	    
-    	Connection.getInputAsHashmap(Connection.getTopTen("", "")).forEach((k,v) -> addToTopTen(k,v));    	
+    	addToTopTen(Connection.getInputAsHashmap((Connection.getTopTen("", ""))));    	
     }
     
     private void createGameObjects() {
