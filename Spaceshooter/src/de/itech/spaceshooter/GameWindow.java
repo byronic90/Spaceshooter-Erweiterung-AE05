@@ -83,7 +83,7 @@ public class GameWindow extends JFrame{
         scoreItem.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {                
-                shipGamePanel.setGameState(1);                
+                shipGamePanel.switchToScoreboard();                
             }
         });
         
