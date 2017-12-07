@@ -54,7 +54,7 @@ public class GamePanel2 extends JPanel{
     private int asteroidSpawnTime = 60;
     private int asteroidSpeed = 5;  
     private int spawnResetTime = asteroidSpawnTime;    
-    private int gameState = 0; //0 - InitState, 1 - Scoreboard, 2 - Alive and Gaming, 3 - Input, 4 - Menu
+    private int gameState = 0; //0 - InitState, 1 - Scoreboard, 2 - Alive and Gaming, 3 - Input, 4 - Menu, 5 - Settings
     private int textPosX = 50;
     private int textPosY;
     private int resetY;
@@ -438,7 +438,12 @@ public class GamePanel2 extends JPanel{
                     }
                 }
             }
-            for (Asteroid ast : testAsts) { ast.makeMove(); }
+            for (int i=0; i < testAsts.size(); i++) {
+            	testAsts.get(i);
+            	if (testAsts.get(i).getObjectPosition().getX() < -50) {
+            		testAsts.remove(testAsts.get(i));            		
+            	} else { testAsts.get(i).makeMove(); }            	
+            }            
             updateExplosions();            
             spawnAsteroidIfReady();            
             playersShip.makeMove();

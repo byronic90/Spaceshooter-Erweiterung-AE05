@@ -29,6 +29,8 @@ public class Asteroid extends GameObject{
 
     public void setRange(int range) { this.range = range; }
     
+    public Coordinate getPosition() { return super.getObjectPosition(); }    	   
+    
     @Override
     public void makeMove() {
     	asteroidRotationAngle = asteroidRotationAngle + turningVelocity;
